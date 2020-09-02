@@ -10,6 +10,8 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+
+
 # Package Files #
 *.jar
 *.war
@@ -25,6 +27,10 @@
 .DS_Store
 Thumbs.db
 
+# Spring / Java Backend
+/app/.mvn
+/app/mvnw
+/app/mvnw.cmd
 
 # Angular 
 node_modules
