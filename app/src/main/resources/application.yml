@@ -1,0 +1,18 @@
+spring:
+   datasource:
+      url: jdbc:h2:file:./nidhogg
+      driverClassName: org.h2.Driver
+      username: sa
+      password: password
+
+   h2:
+      console:
+         path: /h2-console
+         settings:
+            trace: false
+            web-allow-others: false
+   jpa:
+      database-platform: org.hibernate.dialect.H2Dialect
+server:
+  error:
+    include-stacktrace: never
