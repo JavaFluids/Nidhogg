@@ -18,6 +18,29 @@
 *.zip
 *.tar.gz
 *.rar
+*.db
+*.ks
+
+# System Files
+.DS_Store
+Thumbs.db
+
+
+# Angular 
+node_modules
+/front/src/main/web
+/front/target
+/front/e2e
+/front/.sass-cache
+/front/connect.lock
+/front/coverage
+/front/libpeerconnection.log
+npm-debug.log
+testem.log
+/front/typings
+.browserslistrc
+.editorconfig
+
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
