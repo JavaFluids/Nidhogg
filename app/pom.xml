@@ -16,6 +16,9 @@
 	</properties>
 
 	<dependencies>
+
+		<!-- Spring Boot staters -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -43,16 +46,6 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -63,25 +56,56 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<!-- Database and REST Data access -->
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.4.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.4.8</version>
+		</dependency>
+
+
+		<!-- Security -->
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Model mapping -->
+
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>2.3.8</version>
 		</dependency>
-		<!-- <dependency> <groupId>io.jsonwebtoken</groupId> <artifactId>jjwt</artifactId> 
-			<version>0.9.1</version> </dependency> -->
+
+		<!-- JWT & KeyStores -->
+
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
 			<version>0.11.2</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl -->
+
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
@@ -92,25 +116,29 @@
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-gson</artifactId>
 			<version>0.11.2</version>
-			<scope>compile</scope> <!-- Not runtime -->
+			<scope>compile</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.66</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk15on</artifactId>
+			<version>1.66</version>
+		</dependency>
+
+		<!-- Other utilities -->
 
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.7</version>
 		</dependency>
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk15on</artifactId>
-			<version>1.66</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on -->
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcpkix-jdk15on</artifactId>
-			<version>1.66</version>
-		</dependency>
+
 
 
 
@@ -121,8 +149,75 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>pre-integration-test</id>
+						<goals>
+							<goal>start</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-integration-test</id>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
+
+
+			<!-- Generate OpenAPI.json -->
+			<plugin>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<apiDocsUrl>http://localhost:8080/api/v3/api-docs</apiDocsUrl>
+					<outputFileName>openapi.json</outputFileName>
+					<!-- <outputDir>/home/springdoc/maven-output</outputDir> -->
+				</configuration>
+
+			</plugin>
+
+			<!-- Build Client SDK -->
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.build.directory}/openapi.json</inputSpec>
+							<generatorName>java</generatorName>
+							<apiPackage>lu.nidhogg.api</apiPackage>
+							<modelPackage>lu.nidhogg.model</modelPackage>
+							<invokerPackage>lu.nidhogg</invokerPackage>
+							<library>resttemplate</library>
+							<gitHost>github.com</gitHost>
+							<gitUserId>JavaFluids</gitUserId>
+							<gitRepoId>Nidhogg-SDK</gitRepoId>
+							<configOptions>
+								<sourceFolder>src/gen/java/main</sourceFolder>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
+
 
 </project>

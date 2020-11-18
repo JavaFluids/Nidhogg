@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class ValidateRequestDTO {
 
-	private String accessToken;
-	
-	private String clientToken;
-	
+	private String	accessToken;
+
+	private String	clientToken;
+
 }

@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class InvalidateRequestDTO {
 
-	private String accessToken;
+	private String	accessToken;
 
-	private String clientToken;
+	private String	clientToken;
 
 }

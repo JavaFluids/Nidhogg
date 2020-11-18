@@ -9,14 +9,14 @@ import lu.nidhogg.models.User;
 @Data
 public class AuthenticateResponseDTO {
 
-	private User user;
+	private User			user;
 
-	private String accessToken;
+	private String			accessToken;
 
-	private String clientToken;
+	private String			clientToken;
 
-	private List<Profile> availableProfiles;
+	private List<Profile>	availableProfiles;
 
-	private Profile selectedProfile;
+	private Profile			selectedProfile;
 
 }

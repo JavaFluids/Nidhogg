@@ -1,17 +1,23 @@
 package lu.nidhogg.dtos;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 import lombok.Data;
-import lu.nidhogg.models.Profile;
 
 @Data
 public class RefreshRequestDTO {
 
-	private String accessToken;
+	@NotBlank
+	private String	accessToken;
 
-	private String clientToken;
+	@NotBlank
+	@Pattern(regexp = "^[a-z0-9]{32}", message = "Length must be 32")
+	private String	clientToken;
 
-	private Profile selectedProfile;
+	// Not implemented by Mojang yet
+	// private Profile selectedProfile;
 
-	private boolean requestUser;
+	private boolean	requestUser;
 
 }
